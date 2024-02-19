@@ -1,0 +1,230 @@
+<style>
+  body {
+    --background-color: #222;
+    --primary-color: aliceblue;
+    ---tranparent: #00000000;
+    --lighten: #ffffff0f;
+    --darken: #00000030;
+    --border-radius: 0.25rem;
+    --h-gap: 10px;
+    --v-gap: 5px;
+    --padding: 4px;
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    justify-content: center;
+    background-color: var(--background-color);
+    color: var(--primary-color);
+  }
+
+  h3 {
+    font-weight: 200;
+  }
+
+  input {
+    border-radius: var(--border-radius);
+    background-color: var(---darken);
+    color: var(--primary-color);
+    box-shadow: none;
+    border: solid 1px;
+    padding: var(--padding);
+  }
+
+  .action-button {
+    background-color: var(---tranparent);
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    border: solid 2px var(--primary-color);
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: medium;
+  }
+
+  .action-button.secondary {
+    border: 0px;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+  }
+
+  a.action-button {
+    text-decoration: none;
+  }
+
+  .actions {
+    display: flex;
+    gap: var(--h-gap);
+    width: fit-content;
+    margin: auto;
+  }
+
+  .basic-page {
+    width: 70%;
+    background-color: var(--lighten);
+    border-radius: var(--border-radius);
+  }
+
+  form {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(2 * var(--v-gap));
+  }
+
+  form div.form-row p {
+    margin: 0px;
+    padding: var(--padding);
+  }
+
+  form div.form-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--v-gap);
+  }
+
+  form div.form-fields div.form-row {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--h-gap);
+  }
+
+  table {
+    border-right: solid 2px var(--primary-color);
+    border-bottom: solid 2px var(--primary-color);
+    border-spacing: 0px;
+  }
+
+  th {
+    border-top: solid 2px var(--primary-color);
+    border-bottom: solid 1px var(--primary-color);
+    border-left: solid 2px var(--primary-color);
+  }
+
+  td {
+    border-top: solid 1px var(--primary-color);
+    border-left: solid 2px var(--primary-color);
+  }
+
+  th,
+  td {
+    padding: 4px 10px;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .required {
+    color: red;
+  }
+
+  form table {
+    border: 0px;
+    padding: 0px;
+    border-spacing: 10px;
+  }
+
+  form table tr {
+    border: 0px;
+  }
+
+  form table td {
+    border: 0px;
+    padding: 0px;
+  }
+
+  form table td label {
+    border: 0px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  
+  form table td label p {
+    margin: 0px;
+  }
+</style>
+
+<body>
+  <div class="basic-page">
+    <form action="./home.html" method="POST">
+      <table>
+        <tr>
+          <td>
+            <label>Title</label>
+          </td>
+          <td><input type="text" name="title" /></td>
+          
+        </tr>
+
+        <td>
+          <label>Author</label>
+          </td>
+          <td><input type="text" name="author" /></td>
+          
+        </tr>
+
+        <td>
+          <label>ISBN</label>
+          </td>
+          <td><input type="text" name="isbn" /></td>
+          
+        </tr>
+
+        <td>
+          <label>Publisher</label>
+          </td>
+          <td><input type="text" name="publisher" /></td>
+          
+        </tr>
+
+        <td>
+          <label>Year</label>
+          </td>
+          <td><input type="text" name="year" /></td>
+          
+        </tr>
+      </table>
+
+      <div class="actions">
+        <button class="action-button" type="submit">Search</button>
+        <a
+          class="action-button secondary"
+          href="file:///D:/Projects/pythonanywhere/home.html"
+          >Back</a
+        >
+      </div>
+    </form>
+
+    <div style="display: flex; justify-content: center">
+      <table>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>ISBN</th>
+          <th>Publisher</th>
+          <th>Year</th>
+        </tr>
+
+        <tr>
+          <td>A Ponderous Tome</td>
+          <td>Brandon Barr</td>
+          <td>978-5-7999-8738-1</td>
+          <td>Elevator4</td>
+          <td>2024</td>
+        </tr>
+
+        <tr>
+          <td>A Pretty Picture</td>
+          <td>Deanna Short</td>
+          <td>978-5-7999-8738-1</td>
+          <td>Elevator4</td>
+          <td>2024</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>

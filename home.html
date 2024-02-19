@@ -1,0 +1,111 @@
+<style>
+  body {
+    --background-color: #222;
+    --primary-color: aliceblue;
+    ---tranparent: #00000000;
+    --lighten: #ffffff0f;
+    --darken: #00000030;
+    --border-radius: 0.25rem;
+    --h-gap: 10px;
+    --v-gap: 5px;
+    --padding: 4px;
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    justify-content: center;
+    background-color: var(--background-color);
+    color: var(--primary-color);
+  }
+
+  h3 {
+    font-weight: 200;
+  }
+
+  input {
+    border-radius: var(--border-radius);
+    background-color: var(---darken);
+    color: var(--primary-color);
+    box-shadow: none;
+    border: solid 1px;
+    padding: var(--padding);
+  }
+
+  .action-button {
+    background-color: var(---tranparent);
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    border: solid 2px var(--primary-color);
+    padding: 5px 10px;
+    cursor: pointer;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: medium;
+  }
+
+  .action-button.secondary {
+    border: 0px;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+  }
+
+  a.action-button {
+    text-decoration: none;
+  }
+
+  .actions {
+    display: flex;
+    gap: var(--h-gap);
+    width: fit-content;
+    margin: auto;
+  }
+
+  .basic-page {
+    width: 70%;
+    background-color: var(--lighten);
+    border-radius: var(--border-radius);
+  }
+
+  form {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(2 * var(--v-gap));
+  }
+
+  form div.form-row p {
+    margin: 0px;
+    padding: var(--padding);
+  }
+
+  form div.form-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--v-gap);
+  }
+
+  form div.form-fields div.form-row {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--h-gap);
+  }
+</style>
+
+<body>
+  <div class="basic-page">
+    <h3 style="text-align: center">What action would you like to perform?</h3>
+    <div class="actions">
+      <a
+        class="action-button"
+        href="file:///D:/Projects/pythonanywhere/create.html"
+      >
+        Create
+      </a>
+      <a
+        class="action-button"
+        href="file:///D:/Projects/pythonanywhere/search.html"
+        >Search</a
+      >
+    </div>
+  </div>
+</body>
