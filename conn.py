@@ -178,7 +178,7 @@ STYLES = """
     align-items: center;
     justify-content: flex-end;
   }
-  
+
   form table td label p {
     margin: 0px;
   }
@@ -211,7 +211,7 @@ def home_page():
 """)
 
 
-def search_page(query_string):
+def search_page(query_string, status_code = HttpStatus.OK):
   query = parse_qs(query_string)
   results = []
 
@@ -236,11 +236,11 @@ def search_page(query_string):
       commands.append(f"Author like '%{book['author']}%'")
 
   if book['isbn']:
-      commands.append(f"ISBN like '%{book['isbn']}%'")
-      
+      commands.append(f"ISBN = '{book['isbn']}'")
+
   if book['publisher']:
       commands.append(f"Publisher like '%{book['publisher']}%'")
-      
+
   if book['year']:
       commands.append(f"Year = '{book['year']}'")
 
@@ -262,7 +262,7 @@ def search_page(query_string):
         <td>{year}</td>
       </tr>
     """
-  
+
   table = f"""
       <div style="display: flex; justify-content: center">
         <table>
@@ -279,9 +279,9 @@ def search_page(query_string):
       </div>
 """
 
-  return (HttpStatus.OK, f"""
+  return (status_code, f"""
 {STYLES}
-            
+
 <body>
   <div class="basic-page">
     <form action="/books" method="GET">
@@ -334,7 +334,6 @@ def search_page(query_string):
 """)
 
 DEFAULT_RESPONSE = {
-     'data': None,
      'errors': {
         "title": None,
         "author": None,
@@ -345,18 +344,10 @@ DEFAULT_RESPONSE = {
      'hasErrors': False
   }
 
-def create_page(response: dict = DEFAULT_RESPONSE):
-  response_code = HttpStatus.OK
-
-  if response['hasErrors'] == True:
-    response_code = HttpStatus.BAD_REQUEST
-
-  if not response['data'] == None:
-    response_code = HttpStatus.CREATED
-
+def create_page(response: dict = DEFAULT_RESPONSE, response_code = HttpStatus.OK):
   return (response_code, f"""
 {STYLES}
-            
+
 <body>
   <div class="basic-page">
     <form action="/books/create" method="PUT">
@@ -407,8 +398,6 @@ def create_page(response: dict = DEFAULT_RESPONSE):
         >
       </div>
     </form>
-
-    {'' if response['data'] == None else f'<p style="text-align: center; padding-top: 5px">Record for {response["data"]["isbn"]} created</p>'}
   </div>
 </body>
 """)
@@ -416,7 +405,6 @@ def create_page(response: dict = DEFAULT_RESPONSE):
 def submit_book(query_string):
   query = parse_qs(query_string)
   response = {
-     'data': None,
      'errors': {
         "title": None,
         "author": None,
@@ -438,7 +426,7 @@ def submit_book(query_string):
   if not book['title']:
     response['hasErrors'] = True
     response['errors']['title'] = 'Title is required'
-  
+
   if not book['author']:
     response['hasErrors'] = True
     response['errors']['author'] = 'Author is required'
@@ -446,35 +434,34 @@ def submit_book(query_string):
   if not book['isbn']:
     response['hasErrors'] = True
     response['errors']['isbn'] = 'ISBN is required'
-  
+
   if not book['publisher']:
     response['hasErrors'] = True
     response['errors']['publisher'] = 'Publisher is required'
-  
+
   if not book['year']:
     response['hasErrors'] = True
     response['errors']['year'] = 'Year is required'
 
   if response['hasErrors']:
-    return create_page(response)
+    return create_page(response, HttpStatus.BAD_REQUEST)
 
   database = Database()
   cursor = database.connection.cursor()
 
-  cursor.execute(f"SELECT COUNT(*) FROM Books WHERE ISBN = {book['isbn']}")
-  
+  cursor.execute(f"SELECT COUNT(*) FROM Books WHERE ISBN = '{book['isbn']}'")
+
   if cursor.fetchall()[0][0] > 0:
     response['hasErrors'] = True
     response['errors']['isbn'] = 'Book with ISBN exists'
-    return create_page(response)
-  
+    return create_page(response, HttpStatus.BAD_REQUEST)
+
   cursor.reset()
   cursor.execute(f"INSERT INTO Books (Title, Author, ISBN, Publisher, Year) VALUES ('{book['title']}', '{book['author']}', '{book['isbn']}', '{book['publisher']}', '{book['year']}');")
-  
-  response['data'] = book
+  database.connection.commit()
 
-  return create_page(response)
-    
+  return search_page('title=&author=&isbn=&publisher=&year=', HttpStatus.CREATED)
+
 
 def not_found():
   return (HttpStatus.NOT_FOUND, "no tings found")
@@ -486,12 +473,10 @@ def application(environ: dict, start_response):
           (status, content) = home_page()
       case ('/books', 'GET'):
           (status, content) = search_page(environ.get('QUERY_STRING'))
-      case ('/books/create', 'PUT'):
-          (status, content) = submit_book(environ.get('QUERY_STRING'))
       case ('/books/create', 'GET'):
           query_string = environ.get('QUERY_STRING')
           (status, content) = create_page() if not query_string else submit_book(query_string)
-      case _: 
+      case _:
           (status, content) = not_found()
 
   response_headers = [('Content-Type', 'text/html'), ('Content-Length', str(len(content)))]
